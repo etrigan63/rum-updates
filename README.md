@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="thumbnail.webp" width="96" alt="RUM Updates plugin icon">
+  <img src="rum-updates/thumbnail.webp" width="96" alt="RUM Updates plugin icon">
 </p>
 
 # RUM Updates
@@ -15,7 +15,7 @@ The plugin checks for updates in the background, displays the available count in
 The widget displays a configurable glyph and the number of overlay package updates reported by `rum`.
 
 <p align="center">
-  <img src="docs/screenshots/widget-bar.png" width="768" alt="RUM Updates widget in the Noctalia bar showing zero available updates">
+  <img src="rum-updates/docs/screenshots/widget-bar.png" width="768" alt="RUM Updates widget in the Noctalia bar showing zero available updates">
 </p>
 
 ### Configuration
@@ -23,7 +23,7 @@ The widget displays a configurable glyph and the number of overlay package updat
 The plugin settings control polling and notifications. Each bar widget has its own visibility, glyph, click action, and terminal settings.
 
 <p align="center">
-  <img src="docs/screenshots/widget-settings.png" width="720" alt="RUM Updates configuration in Noctalia settings">
+  <img src="rum-updates/docs/screenshots/widget-settings.png" width="720" alt="RUM Updates configuration in Noctalia settings">
 </p>
 
 ## Features
@@ -205,8 +205,8 @@ rum-updates/
 | ID | `etrigan63/rum-updates` |
 | Version | `0.1.3` |
 | Noctalia plugin API | `3` |
-| License | [MIT](../LICENSE) |
+| License | [MIT](LICENSE) |
 
 ## License
 
-RUM Updates is available under the [MIT License](../LICENSE).
+RUM Updates is available under the [MIT License](LICENSE).
