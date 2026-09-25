@@ -8,6 +8,16 @@ A Noctalia bar widget for monitoring and managing RakuOS overlay package updates
 
 The plugin checks for updates in the background, displays the available count in your bar, provides package details on hover, and can open either RakuOS Software Center or the `rum` system upgrade command in a terminal.
 
+## Plugin
+
+| Field | Value |
+| --- | --- |
+| ID | `etrigan63/rum-updates` |
+| Entries | Bar widget: `rum_updates`; service: `update_poller` |
+| Version | `0.1.4` |
+| Noctalia plugin API | `3` |
+| License | MIT |
+
 ## Screenshots
 
 ### Bar widget
@@ -211,16 +221,6 @@ rum-updates/
     ├── translations/en.json
     └── widget.luau
 ```
-
-## Plugin metadata
-
-| Field | Value |
-| --- | --- |
-| ID | `etrigan63/rum-updates` |
-| Entries | Bar widget: `rum_updates`; service: `update_poller` |
-| Version | `0.1.4` |
-| Noctalia plugin API | `3` |
-| License | [MIT](LICENSE) |
 
 ## License
 
