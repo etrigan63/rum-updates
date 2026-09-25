@@ -224,4 +224,4 @@ rum-updates/
 
 ## License
 
-RUM Updates is available under the [MIT License](../LICENSE).
+RUM Updates is available under the [MIT License](LICENSE).
