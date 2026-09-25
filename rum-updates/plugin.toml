@@ -1,6 +1,6 @@
 id = "etrigan63/rum-updates"
 name = "RUM Updates"
-version = "0.1.2"
+version = "0.1.3"
 author = "etrigan63"
 license = "MIT"
 icon = "download"
@@ -41,6 +41,13 @@ description_key = "settings.hide_when_empty.description"
 default = true
 
 [[widget.setting]]
+key = "glyph"
+type = "glyph"
+label_key = "settings.glyph.label"
+description_key = "settings.glyph.description"
+default = "download"
+
+[[widget.setting]]
 key = "click_action"
 type = "select"
 label_key = "settings.click_action.label"
@@ -50,3 +57,11 @@ options = [
   { value = "open_software_center", label_key = "settings.click_action.options.open_software_center" },
   { value = "run_updater", label_key = "settings.click_action.options.run_updater" }
 ]
+
+[[widget.setting]]
+key = "terminal_application"
+type = "string"
+label_key = "settings.terminal_application.label"
+description_key = "settings.terminal_application.description"
+default = ""
+visible_when = { key = "click_action", values = ["run_updater"] }

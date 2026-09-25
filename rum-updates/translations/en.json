@@ -8,6 +8,7 @@
     "notify": {
       "missing_rum": "rum is not available",
       "missing_software_center": "RakuOS Software Center is not available",
+      "terminal_launch_failed": "Could not open a terminal",
       "new_updates": {
         "title": "New RUM updates available",
         "description": "{count} RUM package updates are available."
@@ -39,6 +40,10 @@
       "label": "Hide when empty",
       "description": "Hide the widget when no updates are available."
     },
+    "glyph": {
+      "label": "Glyph",
+      "description": "Icon shown before the update count."
+    },
     "click_action": {
       "label": "Click action",
       "description": "Action performed when the widget is clicked.",
@@ -46,6 +51,10 @@
         "open_software_center": "Open RakuOS Software Center",
         "run_updater": "Run rum system upgrade"
       }
+    },
+    "terminal_application": {
+      "label": "Terminal application",
+      "description": "Executable path or name used to run the updater. Leave blank to use Noctalia's detected terminal."
     }
   },
   "tooltip": {

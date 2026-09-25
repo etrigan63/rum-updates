@@ -2,6 +2,8 @@
 
 local hideWhenEmpty = noctalia.getConfig("hide_when_empty") == true
 local notify = noctalia.getConfig("notify") == true
+local glyph = noctalia.getConfig("glyph") or "download"
+local terminalApplication = noctalia.string.trim(noctalia.getConfig("terminal_application") or "")
 local clickAction = noctalia.getConfig("click_action") or "open_software_center"
 if clickAction ~= "run_updater" then
     clickAction = "open_software_center"
@@ -73,7 +75,7 @@ local function render()
         align = "center",
         visible = visible,
     }, {
-        ui.glyph({ name = "download", size = 14 }),
+        ui.glyph({ name = glyph, size = 14 }),
         ui.label({ text = text }),
     }))
 
@@ -109,13 +111,47 @@ noctalia.state.watch("update_error", function(value)
     render()
 end)
 
-function onClick()
-    if clickAction == "run_updater" then
-        if not noctalia.commandExists("rum") then
-            noctalia.notifyError("RUM Updates", noctalia.tr("bar.notify.missing_rum"))
+local function shellQuote(value)
+    local quoted = value:gsub("'", "'\\''")
+    return `'{quoted}'`
+end
+
+local function runUpdater()
+    if not noctalia.commandExists("rum") then
+        noctalia.notifyError("RUM Updates", noctalia.tr("bar.notify.missing_rum"))
+        return
+    end
+
+    local command = "sudo rum system-upgrade"
+    if terminalApplication == "" then
+        if noctalia.runInTerminal(command) then
             return
         end
-        noctalia.runInTerminal("sudo rum system-upgrade")
+    else
+        local executable = noctalia.expandPath(terminalApplication)
+        if not noctalia.commandExists(executable) then
+            noctalia.notifyError("RUM Updates", noctalia.tr("bar.notify.terminal_launch_failed"))
+            return
+        end
+
+        local terminalName = executable:match("([^/]+)$") or executable
+        local separator = "-e"
+        if terminalName == "gnome-terminal" or terminalName == "kgx" or terminalName == "ptyxis" then
+            separator = "--"
+        end
+
+        local launchCommand = `{shellQuote(executable)} {separator} sh -lc {shellQuote(command)}`
+        if noctalia.runAsync(launchCommand) then
+            return
+        end
+    end
+
+    noctalia.notifyError("RUM Updates", noctalia.tr("bar.notify.terminal_launch_failed"))
+end
+
+function onClick()
+    if clickAction == "run_updater" then
+        runUpdater()
         return
     end
 

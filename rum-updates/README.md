@@ -7,7 +7,7 @@ A Noctalia plugin that monitors and manages RakuOS updates with [`rum`](https://
 | Field | Value |
 | --- | --- |
 | ID | `etrigan63/rum-updates` |
-| Version | `0.1.2` |
+| Version | `0.1.3` |
 | Noctalia plugin API | `3` |
 | License | `MIT` |
 | Requirements | RakuOS with `rum` 0.1.0 or later; `rakuos-software` is optional |
@@ -23,6 +23,9 @@ Click the widget to open **RakuOS Software Center**. Alternatively, set its clic
 - **Update check interval**: Polling interval in seconds, from 60 to 86400.
 - **Notify**: Show a notification when the available update count increases.
 - **Hide when empty**: Hide the widget while no overlay package updates are available.
+- **Glyph**: Select the icon shown before the update count.
+- **Click action**: Open RakuOS Software Center or run the updater in a terminal.
+- **Terminal application**: Set the updater terminal's executable path or name, such as `kgx` or `/usr/bin/kitty`. Leave it blank to use Noctalia's detected terminal.
 
 ### Installation
 
