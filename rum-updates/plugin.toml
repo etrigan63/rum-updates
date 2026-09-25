@@ -1,0 +1,46 @@
+id = "etrigan63/rum-updates"
+name = "RUM Updates"
+version = "0.1.0"
+author = "etrigan63"
+license = "MIT"
+icon = "download"
+description = "Monitor and manage RakuOS updates with rum."
+plugin_api = 3
+tags = ["system", "utility"]
+dependencies = ["rum"]
+
+[config]
+interval.default = 300
+interval.description = "Update check interval in seconds"
+interval.type = "number"
+interval.min = 60
+interval.max = 86400
+notify.default = false
+notify.description = "Notify when newly available updates are detected"
+notify.type = "boolean"
+hide_when_empty.default = true
+hide_when_empty.description = "Hide the widget when no updates are available"
+hide_when_empty.type = "boolean"
+click_action.default = "open_software_center"
+click_action.description = "Action performed when the widget is clicked"
+click_action.type = "select"
+click_action.values = ["open_software_center", "run_updater"]
+
+[service]
+id = "update_poller"
+label = "RUM Update Poller"
+icon = "download"
+type = "poller"
+
+[widget]
+id = "rum_updates"
+label = "RUM Updates"
+icon = "download"
+type = "bar"
+
+[widget.click]
+label = "Click Action"
+icon = "mouse-pointer-2"
+type = "select"
+default = "open_software_center"
+values = ["open_software_center", "run_updater"]

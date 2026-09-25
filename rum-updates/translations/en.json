@@ -1,0 +1,30 @@
+{
+  "bar": {
+    "text": {
+      "error": "RUM error",
+      "single": "1 Update",
+      "plural": "{count} Updates"
+    },
+    "notify": {
+      "missing_rum": "rum is not available",
+      "missing_software_center": "RakuOS Software Center is not available",
+      "new_updates": "{count} RUM package updates are available",
+      "software_center_failed": "Could not open RakuOS Software Center",
+      "terminal_failed": "Could not open a terminal"
+    }
+  },
+  "poller": {
+    "error": {
+      "exit": "rum exited with status {code}",
+      "invalid_json": "rum returned invalid JSON",
+      "invalid_payload": "rum returned an invalid update payload",
+      "launch_failed": "Could not start rum",
+      "missing_rum": "rum is not installed"
+    }
+  },
+  "tooltip": {
+    "error": "Update check failed",
+    "package_updates": "RUM package updates",
+    "repository": "Repository: {repo}"
+  }
+}
