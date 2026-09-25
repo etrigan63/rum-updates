@@ -16,11 +16,14 @@
   },
   "poller": {
     "error": {
+      "decode_failed": "rum returned invalid JSON: {error}",
       "exit": "rum exited with status {code}",
-      "invalid_json": "rum returned invalid JSON",
+      "invalid_json": "no JSON object was found",
       "invalid_payload": "rum returned an invalid update payload",
+      "invalid_result": "rum returned no process result",
       "launch_failed": "Could not start rum",
-      "missing_rum": "rum is not installed"
+      "missing_rum": "rum is not installed",
+      "timed_out": "rum update check timed out after {seconds} seconds"
     }
   },
   "settings": {

@@ -2,6 +2,8 @@
 
 local updates = {}
 local isPolling = false
+local currentError = nil
+local commandTimeoutMs = 60000
 
 local interval = tonumber(noctalia.getConfig("interval")) or 300
 interval = math.max(60, math.min(interval, 86400))
@@ -26,8 +28,12 @@ local function cleanError(value)
 end
 
 local function findJson(stdout)
+    if type(stdout) ~= "string" then
+        return nil
+    end
+
     local candidate = nil
-    for line in string.gmatch(stdout or "", "[^\r\n]+") do
+    for line in string.gmatch(stdout, "[^\r\n]+") do
         local text = trim(line)
         if string.sub(text, 1, 1) == "{" and string.sub(text, -1) == "}" then
             candidate = text
@@ -44,7 +50,9 @@ local function decodeUpdates(stdout)
 
     local decoded, decodeError = noctalia.json.decode(text)
     if decoded == nil or decodeError ~= nil then
-        return nil, noctalia.tr("poller.error.invalid_json")
+        return nil, noctalia.tr("poller.error.decode_failed", {
+            error = decodeError or noctalia.tr("poller.error.invalid_json"),
+        })
     end
     if type(decoded) ~= "table" or type(decoded.updates) ~= "table" then
         return nil, noctalia.tr("poller.error.invalid_payload")
@@ -84,7 +92,8 @@ local function decodeUpdates(stdout)
 end
 
 local function showError(message)
-    noctalia.state.set("update_error", cleanError(message))
+    currentError = cleanError(message)
+    noctalia.state.set("update_error", currentError)
 end
 
 local function refresh()
@@ -103,8 +112,25 @@ local function refresh()
     local started = noctalia.runAsync("rum check-upgrade --json", function(result)
         isPolling = false
 
+        if type(result) ~= "table" then
+            showError(noctalia.tr("poller.error.invalid_result"))
+            return
+        end
+        if result.timedOut == true then
+            showError(noctalia.tr("poller.error.timed_out", {
+                seconds = commandTimeoutMs / 1000,
+            }))
+            return
+        end
         if result.exitCode ~= 0 then
-            showError(result.stderr)
+            local message = noctalia.tr("poller.error.exit", {
+                code = tostring(result.exitCode),
+            })
+            local detail = trim(result.stderr)
+            if detail ~= "" then
+                message = string.format("%s: %s", message, detail)
+            end
+            showError(message)
             return
         end
 
@@ -115,9 +141,10 @@ local function refresh()
         end
 
         updates = parsed
+        currentError = nil
         noctalia.state.set("updates", updates)
         noctalia.state.set("update_error", nil)
-    end)
+    end, commandTimeoutMs)
 
     if not started then
         isPolling = false
@@ -129,6 +156,18 @@ end
 
 function update()
     refresh()
+end
+
+function onIpc(event)
+    if event == "refresh" then
+        refresh()
+    elseif event == "status" then
+        noctalia.log(string.format(
+            "RUM Updates: updates=%d error=%s",
+            #updates,
+            currentError or "none"
+        ))
+    end
 end
 
 refresh()
