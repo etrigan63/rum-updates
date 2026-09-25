@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="thumbnail.webp" width="96" alt="RUM Updates plugin icon">
-</p>
+![RUM Updates plugin icon](thumbnail.webp)
 
 # RUM Updates
 
@@ -24,17 +22,13 @@ The plugin checks for updates in the background, displays the available count in
 
 The widget displays a configurable glyph and the number of overlay package updates reported by `rum`.
 
-<p align="center">
-  <img src="docs/screenshots/widget-bar.png" width="768" alt="RUM Updates widget in the Noctalia bar showing zero available updates">
-</p>
+![RUM Updates widget in the Noctalia bar showing zero available updates](docs/screenshots/widget-bar.png)
 
 ### Configuration
 
 The plugin settings control polling and notifications. Each bar widget has its own visibility, glyph, click action, and terminal settings.
 
-<p align="center">
-  <img src="docs/screenshots/widget-settings.png" width="720" alt="RUM Updates configuration in Noctalia settings">
-</p>
+![RUM Updates configuration in Noctalia settings](docs/screenshots/widget-settings.png)
 
 ## Features
 
