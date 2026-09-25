@@ -7,7 +7,7 @@ A Noctalia plugin that monitors and manages RakuOS updates with [`rum`](https://
 | Field | Value |
 | --- | --- |
 | ID | `etrigan63/rum-updates` |
-| Version | `0.1.0` |
+| Version | `0.1.1` |
 | Noctalia plugin API | `3` |
 | License | `MIT` |
 | Requirements | RakuOS with `rum` 0.1.0 or later; `rakuos-software` is optional |

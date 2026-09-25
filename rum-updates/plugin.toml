@@ -1,6 +1,6 @@
 id = "etrigan63/rum-updates"
 name = "RUM Updates"
-version = "0.1.0"
+version = "0.1.1"
 author = "etrigan63"
 license = "MIT"
 icon = "download"
@@ -9,38 +9,44 @@ plugin_api = 3
 tags = ["system", "utility"]
 dependencies = ["rum"]
 
-[config]
-interval.default = 300
-interval.description = "Update check interval in seconds"
-interval.type = "number"
-interval.min = 60
-interval.max = 86400
-notify.default = false
-notify.description = "Notify when newly available updates are detected"
-notify.type = "boolean"
-hide_when_empty.default = true
-hide_when_empty.description = "Hide the widget when no updates are available"
-hide_when_empty.type = "boolean"
-click_action.default = "open_software_center"
-click_action.description = "Action performed when the widget is clicked"
-click_action.type = "select"
-click_action.values = ["open_software_center", "run_updater"]
+[[setting]]
+key = "interval"
+type = "int"
+label_key = "settings.interval.label"
+description_key = "settings.interval.description"
+default = 300
+min = 60
+max = 86400
 
-[service]
+[[setting]]
+key = "notify"
+type = "bool"
+label_key = "settings.notify.label"
+description_key = "settings.notify.description"
+default = false
+
+[[service]]
 id = "update_poller"
-label = "RUM Update Poller"
-icon = "download"
-type = "poller"
+entry = "poller.luau"
 
-[widget]
+[[widget]]
 id = "rum_updates"
-label = "RUM Updates"
-icon = "download"
-type = "bar"
+entry = "widget.luau"
 
-[widget.click]
-label = "Click Action"
-icon = "mouse-pointer-2"
+[[widget.setting]]
+key = "hide_when_empty"
+type = "bool"
+label_key = "settings.hide_when_empty.label"
+description_key = "settings.hide_when_empty.description"
+default = true
+
+[[widget.setting]]
+key = "click_action"
 type = "select"
+label_key = "settings.click_action.label"
+description_key = "settings.click_action.description"
 default = "open_software_center"
-values = ["open_software_center", "run_updater"]
+options = [
+  { value = "open_software_center", label_key = "settings.click_action.options.open_software_center" },
+  { value = "run_updater", label_key = "settings.click_action.options.run_updater" }
+]

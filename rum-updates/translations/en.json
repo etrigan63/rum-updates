@@ -8,9 +8,10 @@
     "notify": {
       "missing_rum": "rum is not available",
       "missing_software_center": "RakuOS Software Center is not available",
-      "new_updates": "{count} RUM package updates are available",
-      "software_center_failed": "Could not open RakuOS Software Center",
-      "terminal_failed": "Could not open a terminal"
+      "new_updates": {
+        "title": "New RUM updates available",
+        "description": "{count} RUM package updates are available."
+      }
     }
   },
   "poller": {
@@ -20,6 +21,28 @@
       "invalid_payload": "rum returned an invalid update payload",
       "launch_failed": "Could not start rum",
       "missing_rum": "rum is not installed"
+    }
+  },
+  "settings": {
+    "interval": {
+      "label": "Refresh seconds",
+      "description": "How often the service checks for updates."
+    },
+    "notify": {
+      "label": "Notify",
+      "description": "Show a notification when the available update count increases."
+    },
+    "hide_when_empty": {
+      "label": "Hide when empty",
+      "description": "Hide the widget when no updates are available."
+    },
+    "click_action": {
+      "label": "Click action",
+      "description": "Action performed when the widget is clicked.",
+      "options": {
+        "open_software_center": "Open RakuOS Software Center",
+        "run_updater": "Run rum system upgrade"
+      }
     }
   },
   "tooltip": {
