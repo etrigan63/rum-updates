@@ -179,7 +179,11 @@ The Software Center action requires the optional `rakuos-software` application. 
 
 ### The count does not change immediately
 
-The service checks in the background. Wait for the configured refresh interval, or disable and re-enable the plugin to start a new check immediately.
+The service checks in the background. Wait for the configured refresh interval, or start an immediate check with:
+
+```sh
+noctalia msg plugin etrigan63/rum-updates:update_poller all refresh
+```
 
 ## Notes
 
@@ -218,4 +222,4 @@ rum-updates/
 
 ## License
 
-RUM Updates is available under the [MIT License](LICENSE).
+RUM Updates is licensed under the MIT License.
