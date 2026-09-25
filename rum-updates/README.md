@@ -44,6 +44,7 @@ The plugin settings control polling and notifications. Each bar widget has its o
 - RakuOS with [`rum`](https://gitlab.com/rakuos/packages/rakuos/rakuos-rum) 0.1.0 or later.
 - A Noctalia release that supports plugin API 3.
 - `rakuos-software` is optional and only needed for the **Open RakuOS Software Center** click action.
+- `sh` and `sudo` are used only when launching the optional terminal updater.
 - A terminal emulator is optional and only needed for the **Run rum system upgrade** click action.
 
 ## Installation
@@ -86,7 +87,18 @@ Click the widget to choose one of the configured actions:
 
 The updater action does not run an upgrade immediately. Review the command in the terminal and enter your password only when you are ready to proceed.
 
-## Configuration
+## IPC
+
+The update service accepts IPC events for manual refreshes and diagnostics:
+
+```sh
+noctalia msg plugin etrigan63/rum-updates:update_poller all refresh
+noctalia msg plugin etrigan63/rum-updates:update_poller all status
+```
+
+`refresh` starts an immediate update check. `status` writes the current update count and error state to the Noctalia log.
+
+## Settings
 
 ### Plugin settings
 
@@ -165,7 +177,9 @@ The Software Center action requires the optional `rakuos-software` application. 
 
 The service checks in the background. Wait for the configured refresh interval, or disable and re-enable the plugin to start a new check immediately.
 
-## Security and privileges
+## Notes
+
+### Security and privileges
 
 - Update checks run as the current user and do not use `sudo`.
 - No upgrade is started automatically.
@@ -203,9 +217,10 @@ rum-updates/
 | Field | Value |
 | --- | --- |
 | ID | `etrigan63/rum-updates` |
-| Version | `0.1.3` |
+| Entries | Bar widget: `rum_updates`; service: `update_poller` |
+| Version | `0.1.4` |
 | Noctalia plugin API | `3` |
-| License | [MIT](../LICENSE) |
+| License | [MIT](LICENSE) |
 
 ## License
 
