@@ -25,14 +25,14 @@ local count = #stateUpdates
 local updateError = stateError
 local isChecking = noctalia.state.get("update_checking") == true
 
-local function manualCheckRow()
-    local hint = noctalia.tr("tooltip.manual_check_hint")
+local function checkNowRow()
+    local hint = noctalia.tr("tooltip.check_now_hint")
     if isChecking then
         hint = noctalia.tr("tooltip.checking")
     end
 
     return {
-        key = noctalia.tr("tooltip.manual_check"),
+        key = noctalia.tr("tooltip.check_now"),
         value = hint,
     }
 end
@@ -44,7 +44,7 @@ local function renderTooltip()
                 key = noctalia.tr("tooltip.error"),
                 value = updateError,
             },
-            manualCheckRow(),
+            checkNowRow(),
         })
         return
     end
@@ -70,7 +70,7 @@ local function renderTooltip()
         })
     end
 
-    table.insert(rows, manualCheckRow())
+    table.insert(rows, checkNowRow())
     barWidget.setTooltip(rows)
 end
 

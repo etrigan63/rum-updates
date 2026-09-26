@@ -24,6 +24,14 @@ The widget displays a configurable glyph and the number of overlay package updat
 
 ![RUM Updates widget in the Noctalia bar showing zero available updates](rum-updates/docs/screenshots/widget-bar.png)
 
+### Manual check
+
+The tooltip ends with a **Check now** row that shows how to start a check on demand and reports progress while it runs.
+
+![RUM Updates tooltip showing the Check now row with the Right-click hint](rum-updates/docs/screenshots/widget-tooltip-idle.png)
+
+![RUM Updates tooltip showing Checking for updates while a manual check runs](rum-updates/docs/screenshots/widget-tooltip-checking.png)
+
 ### Configuration
 
 The plugin settings control polling and notifications. Each bar widget has its own visibility, glyph, click action, and terminal settings.
@@ -82,9 +90,9 @@ Hover over the widget to see:
 - Each package name and architecture.
 - The installed and available versions.
 - The repository associated with each update.
-- The **Manual check** row, which shows how to check for updates on demand.
+- The **Check now** row, which shows how to check for updates on demand.
 
-Right-click the widget to start an immediate update check instead of waiting for the configured interval. While a check is running, **Manual check** changes to **Checking for updates…** and further clicks are ignored. Right-click is always reserved for this check and does not change the configured **Click action**. The widget must be visible, so disable **Hide when empty** if you want to trigger manual checks while no updates are available.
+Right-click the widget to start an immediate update check instead of waiting for the configured interval. While a check is running, **Check now** changes to **Checking for updates…** and further clicks are ignored. Right-click is always reserved for this check and does not change the configured **Click action**. The widget must be visible, so disable **Hide when empty** if you want to trigger checks on demand while no updates are available.
 
 Click the widget to choose one of the configured actions:
 
