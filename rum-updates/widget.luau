@@ -23,12 +23,28 @@ local previousCount = #stateUpdates
 local hasReceivedUpdateState = false
 local count = #stateUpdates
 local updateError = stateError
+local isChecking = noctalia.state.get("update_checking") == true
+
+local function manualCheckRow()
+    local hint = noctalia.tr("tooltip.manual_check_hint")
+    if isChecking then
+        hint = noctalia.tr("tooltip.checking")
+    end
+
+    return {
+        key = noctalia.tr("tooltip.manual_check"),
+        value = hint,
+    }
+end
 
 local function renderTooltip()
     if updateError ~= nil then
         barWidget.setTooltip({
-            key = noctalia.tr("tooltip.error"),
-            value = updateError,
+            {
+                key = noctalia.tr("tooltip.error"),
+                value = updateError,
+            },
+            manualCheckRow(),
         })
         return
     end
@@ -54,6 +70,7 @@ local function renderTooltip()
         })
     end
 
+    table.insert(rows, manualCheckRow())
     barWidget.setTooltip(rows)
 end
 
@@ -111,6 +128,11 @@ noctalia.state.watch("update_error", function(value)
     render()
 end)
 
+noctalia.state.watch("update_checking", function(value)
+    isChecking = value == true
+    renderTooltip()
+end)
+
 local function shellQuote(value)
     local quoted = value:gsub("'", "'\\''")
     return `'{quoted}'`
@@ -163,6 +185,22 @@ function onClick()
         return
     end
     noctalia.runAsync("rakuos-software")
+end
+
+function onRightClick()
+    if isChecking then
+        return
+    end
+
+    local started = noctalia.runAsync(
+        "noctalia msg plugin etrigan63/rum-updates:update_poller all refresh"
+    )
+    if not started then
+        noctalia.notifyError(
+            "RUM Updates",
+            noctalia.tr("bar.notify.refresh_failed")
+        )
+    end
 end
 
 render()

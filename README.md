@@ -12,7 +12,7 @@ The plugin checks for updates in the background, displays the available count in
 | --- | --- |
 | ID | `etrigan63/rum-updates` |
 | Entries | Bar widget: `rum_updates`; service: `update_poller` |
-| Version | `0.1.4` |
+| Version | `0.1.5` |
 | Noctalia plugin API | `3` |
 | License | MIT |
 
@@ -34,6 +34,7 @@ The plugin settings control polling and notifications. Each bar widget has its o
 
 - Checks for RakuOS overlay package updates with `rum check-upgrade --json`.
 - Updates the bar automatically at a configurable interval.
+- Starts an immediate update check when the widget is right-clicked, with progress shown in the tooltip.
 - Shows the current count as `1 Update`, `0 Updates`, or `RUM error`.
 - Provides package names, installed and available versions, and repository names in the tooltip.
 - Supports a configurable Noctalia glyph.
@@ -81,6 +82,9 @@ Hover over the widget to see:
 - Each package name and architecture.
 - The installed and available versions.
 - The repository associated with each update.
+- The **Manual check** row, which shows how to check for updates on demand.
+
+Right-click the widget to start an immediate update check instead of waiting for the configured interval. While a check is running, **Manual check** changes to **Checking for updates…** and further clicks are ignored. Right-click is always reserved for this check and does not change the configured **Click action**. The widget must be visible, so disable **Hide when empty** if you want to trigger manual checks while no updates are available.
 
 Click the widget to choose one of the configured actions:
 
@@ -100,7 +104,7 @@ noctalia msg plugin etrigan63/rum-updates:update_poller all refresh
 noctalia msg plugin etrigan63/rum-updates:update_poller all status
 ```
 
-`refresh` starts an immediate update check. `status` writes the current update count and error state to the Noctalia log.
+`refresh` starts an immediate update check. `status` writes the current update count and error state to the Noctalia log. The widget's right-click action sends the same `refresh` event, so manual and scripted checks share one code path.
 
 ## Settings
 
@@ -154,7 +158,7 @@ When **Notify** is enabled, Noctalia shows a notification only when the number o
 
 ### The widget is not visible
 
-The **Hide when empty** setting is enabled by default. Disable it from the widget settings to keep **0 Updates** visible, or wait until an update is available.
+The **Hide when empty** setting is enabled by default. Disable it from the widget settings to keep **0 Updates** visible, or wait until an update is available. A hidden widget cannot be right-clicked, so manual checks require the widget to stay visible.
 
 ### The widget shows `RUM error`
 
@@ -179,7 +183,7 @@ The Software Center action requires the optional `rakuos-software` application. 
 
 ### The count does not change immediately
 
-The service checks in the background. Wait for the configured refresh interval, or start an immediate check with:
+The service checks in the background. Right-click the widget to start a check immediately, or wait for the configured refresh interval. If the manual check does not appear to work, run:
 
 ```sh
 noctalia msg plugin etrigan63/rum-updates:update_poller all refresh

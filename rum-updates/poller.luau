@@ -11,6 +11,12 @@ noctalia.setUpdateInterval(interval * 1000)
 
 noctalia.state.set("updates", updates)
 noctalia.state.set("update_error", nil)
+noctalia.state.set("update_checking", false)
+
+local function setChecking(value)
+    isPolling = value
+    noctalia.state.set("update_checking", value)
+end
 
 local function trim(value)
     return noctalia.string.trim(value or "")
@@ -102,15 +108,16 @@ local function refresh()
     end
 
     if not noctalia.commandExists("rum") then
+        setChecking(false)
         updates = {}
         noctalia.state.set("updates", updates)
         showError(noctalia.tr("poller.error.missing_rum"))
         return
     end
 
-    isPolling = true
+    setChecking(true)
     local started = noctalia.runAsync("rum check-upgrade --json", function(result)
-        isPolling = false
+        setChecking(false)
 
         if type(result) ~= "table" then
             showError(noctalia.tr("poller.error.invalid_result"))
@@ -147,7 +154,7 @@ local function refresh()
     end, commandTimeoutMs)
 
     if not started then
-        isPolling = false
+        setChecking(false)
         updates = {}
         noctalia.state.set("updates", updates)
         showError(noctalia.tr("poller.error.launch_failed"))
@@ -163,9 +170,10 @@ function onIpc(event)
         refresh()
     elseif event == "status" then
         noctalia.log(string.format(
-            "RUM Updates: updates=%d error=%s",
+            "RUM Updates: updates=%d error=%s checking=%s",
             #updates,
-            currentError or "none"
+            currentError or "none",
+            tostring(isPolling)
         ))
     end
 end

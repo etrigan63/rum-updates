@@ -8,6 +8,7 @@
     "notify": {
       "missing_rum": "rum is not available",
       "missing_software_center": "RakuOS Software Center is not available",
+      "refresh_failed": "Could not start an update check",
       "terminal_launch_failed": "Could not open a terminal",
       "new_updates": {
         "title": "New RUM updates available",
@@ -58,7 +59,10 @@
     }
   },
   "tooltip": {
+    "checking": "Checking for updates…",
     "error": "Update check failed",
+    "manual_check": "Manual check",
+    "manual_check_hint": "Right-click the widget",
     "package_updates": "RUM package updates",
     "repository": "Repository: {repo}"
   }
