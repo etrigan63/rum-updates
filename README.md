@@ -12,7 +12,7 @@ The plugin checks for updates in the background, displays the available count in
 | --- | --- |
 | ID | `etrigan63/rum-updates` |
 | Entries | Bar widget: `rum_updates`; service: `update_poller` |
-| Version | `0.1.5` |
+| Version | `0.1.6` |
 | Noctalia plugin API | `3` |
 | License | MIT |
 
