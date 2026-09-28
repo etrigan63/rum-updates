@@ -13,9 +13,42 @@ noctalia.state.set("updates", updates)
 noctalia.state.set("update_error", nil)
 noctalia.state.set("update_checking", false)
 
+local upgradeWatchTicks = 0
+local upgradeWatchSeconds = 10
+local upgradeWatchMaxTicks = 120
+
 local function setChecking(value)
     isPolling = value
     noctalia.state.set("update_checking", value)
+end
+
+local function applyPollInterval()
+    local seconds = interval
+    if upgradeWatchTicks > 0 then
+        seconds = math.min(upgradeWatchSeconds, interval)
+    end
+    noctalia.setUpdateInterval(seconds * 1000)
+end
+
+local function startUpgradeWatch()
+    upgradeWatchTicks = upgradeWatchMaxTicks
+    applyPollInterval()
+end
+
+-- Returns true while a post-upgrade watch is still running, so transient
+-- failures while rum holds the package database are not surfaced as errors.
+local function consumeUpgradeWatchTick(reachedZero)
+    if upgradeWatchTicks == 0 then
+        return false
+    end
+
+    upgradeWatchTicks = upgradeWatchTicks - 1
+    if reachedZero or upgradeWatchTicks <= 0 then
+        upgradeWatchTicks = 0
+        applyPollInterval()
+    end
+
+    return true
 end
 
 local function trim(value)
@@ -102,6 +135,15 @@ local function showError(message)
     noctalia.state.set("update_error", currentError)
 end
 
+-- Errors are swallowed while watching for an upgrade to finish, so a failed
+-- check during the upgrade does not replace the update list with an error.
+local function fail(message)
+    if consumeUpgradeWatchTick(false) then
+        return
+    end
+    showError(message)
+end
+
 local function refresh()
     if isPolling then
         return
@@ -111,7 +153,7 @@ local function refresh()
         setChecking(false)
         updates = {}
         noctalia.state.set("updates", updates)
-        showError(noctalia.tr("poller.error.missing_rum"))
+        fail(noctalia.tr("poller.error.missing_rum"))
         return
     end
 
@@ -120,11 +162,11 @@ local function refresh()
         setChecking(false)
 
         if type(result) ~= "table" then
-            showError(noctalia.tr("poller.error.invalid_result"))
+            fail(noctalia.tr("poller.error.invalid_result"))
             return
         end
         if result.timedOut == true then
-            showError(noctalia.tr("poller.error.timed_out", {
+            fail(noctalia.tr("poller.error.timed_out", {
                 seconds = commandTimeoutMs / 1000,
             }))
             return
@@ -137,13 +179,13 @@ local function refresh()
             if detail ~= "" then
                 message = string.format("%s: %s", message, detail)
             end
-            showError(message)
+            fail(message)
             return
         end
 
         local parsed, parseError = decodeUpdates(result.stdout)
         if parsed == nil then
-            showError(parseError)
+            fail(parseError)
             return
         end
 
@@ -151,13 +193,14 @@ local function refresh()
         currentError = nil
         noctalia.state.set("updates", updates)
         noctalia.state.set("update_error", nil)
+        consumeUpgradeWatchTick(#parsed == 0)
     end, commandTimeoutMs)
 
     if not started then
         setChecking(false)
         updates = {}
         noctalia.state.set("updates", updates)
-        showError(noctalia.tr("poller.error.launch_failed"))
+        fail(noctalia.tr("poller.error.launch_failed"))
     end
 end
 
@@ -168,12 +211,16 @@ end
 function onIpc(event)
     if event == "refresh" then
         refresh()
+    elseif event == "upgrade_started" then
+        startUpgradeWatch()
+        refresh()
     elseif event == "status" then
         noctalia.log(string.format(
-            "RUM Updates: updates=%d error=%s checking=%s",
+            "RUM Updates: updates=%d error=%s checking=%s watch=%s",
             #updates,
             currentError or "none",
-            tostring(isPolling)
+            tostring(isPolling),
+            tostring(upgradeWatchTicks > 0)
         ))
     end
 end
