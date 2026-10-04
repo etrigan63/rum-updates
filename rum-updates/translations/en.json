@@ -7,9 +7,9 @@
     },
     "notify": {
       "check_complete": {
-        "no_updates": "No RUM updates available.",
+        "no_updates": "No updates available.",
         "title": "RUM Updates",
-        "updates": "{count} RUM updates are available."
+        "updates": "{count} updates are available."
       },
       "missing_rum": "rum is not available",
       "missing_software_center": "RakuOS Software Center is not available",
@@ -17,7 +17,7 @@
       "terminal_launch_failed": "Could not open a terminal",
       "new_updates": {
         "title": "New RUM updates available",
-        "description": "{count} RUM package updates are available."
+        "description": "{count} updates are available."
       }
     }
   },
@@ -68,7 +68,8 @@
     "check_now_hint": "Right-click",
     "checking": "Checking for updates…",
     "error": "Update check failed",
-    "package_updates": "RUM package updates",
+    "flatpak_scope": "Flatpak ({installation})",
+    "package_updates": "Updates",
     "repository": "Repository: {repo}"
   }
 }
